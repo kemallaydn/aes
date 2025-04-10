@@ -18,7 +18,7 @@ function App() {
         >
           <Container>
             <Typography variant="h3" component="h1" color="primary" gutterBottom>
-              Açelya Elif Sağlam'sssın Sayfaaaasınffaafaaaaaaa Hoşgeldiniz
+              Açelya Elif Sağlam'sssaaaın Sayfaaaasınffaafaaaaaaa Hoşgeldiniz
             </Typography>
             <Typography variant="h6" component="p" color="textSecondary">
               Bu sayfa, Açelya Elif Sağlam'a ait özel bir sayfadır. Burada çok eğlenceli şeyler bulabilirsin!
