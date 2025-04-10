@@ -1,22 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { Container, Typography, Box } from '@mui/material'; // Material-UI bileşenlerini içe aktar
+
+import './App.css'; // Stilinizi koruyun
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+            textAlign: 'center',
+          }}
         >
-          Learn React
-        </a>
+          <Container>
+            <Typography variant="h3" component="h1" color="primary" gutterBottom>
+              Açelya Elif Sağlam'ın Sayfasına Hoşgeldiniz
+            </Typography>
+            <Typography variant="h6" component="p" color="textSecondary">
+              Bu sayfa, Açelya Elif Sağlam'a ait özel bir sayfadır. Burada çok eğlenceli şeyler bulabilirsin!
+            </Typography>
+          </Container>
+        </Box>
       </header>
     </div>
   );
