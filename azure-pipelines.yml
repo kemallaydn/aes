@@ -1,8 +1,8 @@
 trigger:
-- main  # Ana branch'ınız (örneğin 'main' veya 'master')
+- main  # Ana branch'ınız
 
 pool:
-  name: 'AWS'  # Agent Pool ismini burada yazıyoruz. EC2'yi eklediğimiz pool ismi bu olacak.
+  name: 'AWS'  # EC2 agent pool ismi
 
 variables:
   remoteUser: 'ec2-user'  # EC2 kullanıcı adı
@@ -13,18 +13,19 @@ jobs:
 - job: DeployToEC2
   displayName: 'Deploy to EC2 instance'
   steps:
-  # SSH anahtarını doğru yere yerleştirme
   - script: |
+      # SSH anahtarını ~/.ssh/id_rsa dosyasına kaydet
       mkdir -p ~/.ssh
       echo "$(sshKey)" > ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
+      # EC2 sunucusuna bağlanmadan önce anahtarın tanındığından emin olalım
       ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts
     displayName: 'Setup SSH key'
 
-  # Docker servisini durdurma ve yeniden başlatma
   - script: |
+      # EC2 sunucusunda Docker servisini yeniden başlat
       ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-        sudo docker-compose down  # Docker servisini durdurma
-        sudo docker-compose up -d  # Docker servisini yeniden başlatma
+        sudo docker-compose down
+        sudo docker-compose up -d
       EOF
     displayName: 'Restart Docker service on EC2'
