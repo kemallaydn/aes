@@ -2,7 +2,7 @@ trigger:
 - main  # Ana branch'ınız
 
 pool:
-  name: 'AWS'  # Agent Pool ismini burada yazıyoruz. EC2'yi eklediğimiz pool ismi bu olacak.
+  name: 'AWS'  # EC2 için kullanılan agent pool
 
 variables:
   remoteUser: 'ec2-user'  # EC2 kullanıcı adı
@@ -12,7 +12,7 @@ jobs:
 - job: DeployToEC2
   displayName: 'Deploy to EC2 instance'
   steps:
-    # Secure file kullanarak SSH anahtarını ayarlıyoruz
+    # Secure file kullanarak SSH anahtarını indiriyoruz
   - task: DownloadSecureFile@1
     name: downloadSSHKey
     inputs:
@@ -21,9 +21,9 @@ jobs:
   # SSH anahtarını doğru yere yerleştirme
   - script: |
       mkdir -p ~/.ssh
-      cp $(downloadSSHKey.secureFilePath) ~/.ssh/aes.pem  # Secure file'ı doğru yere kopyalıyoruz
-      chmod 600 ~/.ssh/aes.pem
-      ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts
+      cp $(downloadSSHKey.secureFilePath) ~/.ssh/id_rsa  # aes.pem dosyasını ~/.ssh/id_rsa olarak kopyalıyoruz
+      chmod 600 ~/.ssh/id_rsa  # Anahtara doğru izinleri veriyoruz
+      ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
     displayName: 'Setup SSH key'
 
   # Docker servisini durdurma ve yeniden başlatma
