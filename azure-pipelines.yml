@@ -1,35 +1,64 @@
 trigger:
-- main  # Ana branch'ınız
+- main  # Ana branch'ınızı seçin
 
 pool:
-  name: 'AWS'  # EC2 için kullanılan agent pool
+  name: 'AWS'  # EC2 sunucusunun bulunduğu agent pool
 
 variables:
   remoteUser: 'ec2-user'  # EC2 kullanıcı adı
   remoteHost: '52.208.254.187'  # EC2 IP adresi
+  repoUrl: 'https://dev.azure.com/your_org/your_project/_git/your_repo'  # Git repository URL
+  repoDir: '/home/ec2-user/aes'  # EC2'de uygulamanın bulunduğu dizin
+  buildDir: '/home/ec2-user/aes/build'  # Build dizini
 
 jobs:
 - job: DeployToEC2
   displayName: 'Deploy to EC2 instance'
   steps:
-    # Secure file kullanarak SSH anahtarını indiriyoruz
-  - task: DownloadSecureFile@1
-    name: downloadSSHKey
-    inputs:
-      secureFile: 'aes.pem'  # Burada Secure File olarak yüklediğiniz dosyanın ismini yazıyorsunuz
+    # SSH anahtarını kurma
+    - script: |
+        mkdir -p ~/.ssh
+        echo "$(SSH_PRIVATE_KEY)" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts
+      displayName: 'Setup SSH key'
 
-  # SSH anahtarını doğru yere yerleştirme
-  - script: |
-      mkdir -p ~/.ssh
-      cp $(downloadSSHKey.secureFilePath) ~/.ssh/id_rsa  # aes.pem dosyasını ~/.ssh/id_rsa olarak kopyalıyoruz
-      chmod 600 ~/.ssh/id_rsa  # Anahtara doğru izinleri veriyoruz
-      ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
-    displayName: 'Setup SSH key'
+    # EC2'ye bağlanıp git repo'yu güncelleme veya çekme
+    - script: |
+        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          # Reposu var mı kontrol et
+          if [ -d "$(repoDir)" ]; then
+            cd $(repoDir)
+            git pull origin main  # Mevcut repoyu güncelle
+          else
+            git clone $(repoUrl) $(repoDir)  # Repo yoksa yeni çek
+            cd $(repoDir)
+          fi
+        EOF
+      displayName: 'Pull or Clone Git Repo'
 
-  # Docker servisini durdurma ve yeniden başlatma
-  - script: |
-      ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-        sudo docker-compose down  # Docker servisini durdurma
-        sudo docker-compose up -d  # Docker servisini yeniden başlatma
-      EOF
-    displayName: 'Restart Docker service on EC2'
+    # Uygulamayı build etme
+    - script: |
+        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          cd $(repoDir)
+          # Eğer node.js ile bir React uygulaması ise:
+          npm install  # Gerekli bağımlılıkları yükle
+          npm run build  # Uygulamayı build et
+        EOF
+      displayName: 'Build the Application'
+
+    # Build dosyalarını Nginx için doğru dizine taşıma
+    - script: |
+        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          # Build dosyalarını Nginx dizinine taşı
+          cp -r $(repoDir)/build/* /usr/share/nginx/html/
+        EOF
+      displayName: 'Move Build Files to Nginx Directory'
+
+    # Nginx servisini yeniden başlatma
+    - script: |
+        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          # Nginx'i yeniden başlat
+          sudo systemctl restart nginx
+        EOF
+      displayName: 'Restart Nginx Service'
