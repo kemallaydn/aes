@@ -1,0 +1,33 @@
+name: Build and Push Docker Image to Docker Hub
+
+on:
+  push:
+    branches:
+      - main  # Ana branch'e commit yapıldığında çalışacak
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # GitHub Actions, Ubuntu üzerinde çalışacak
+
+    steps:
+      # Repo'yu klonla
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Docker Hub'a giriş yap
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}  # GitHub Secrets'dan alacak
+          password: ${{ secrets.DOCKER_PASSWORD }}  # GitHub Secrets'dan alacak
+
+      # Docker imajını build et
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/my-repository:${{ github.sha }} .
+          # Burada github.sha, commit hash'ini alır ve imajı o tag ile build eder
+
+      # Docker imajını Docker Hub'a push et
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-repository:${{ github.sha }}
