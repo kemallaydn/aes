@@ -30,3 +30,12 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/aes:latest
+
+        # 5. Trigger Azure Pipeline
+      - name: Trigger Azure Pipeline
+        run: |
+          curl -u :${{ secrets.AZURE_DEVOPS_TOKEN }} \
+          -X POST \
+          -H "Content-Type: application/json" \
+          -d '{"definition": {"id": "kemallaydn.aes"}}' \
+          https://dev.azure.com/kemalaydin3429/swapify/_apis/build/builds?api-version=6.0
