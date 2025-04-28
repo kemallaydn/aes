@@ -37,5 +37,5 @@ jobs:
           curl -u :${{ secrets.AZURE_DEVOPS_TOKEN }} \
           -X POST \
           -H "Content-Type: application/json" \
-          -d '{"definition": {"name": "kemallaydn.aes"}}' \
+          -d '{"definition": {"name": "aes"}}' \
           https://dev.azure.com/kemalaydin3429/swapify/_apis/build/builds?api-version=6.0
