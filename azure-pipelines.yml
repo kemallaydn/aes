@@ -1,6 +1,3 @@
-trigger:
-- main  # Ana branch'ınız
-
 pool:
   name: 'AWS'  # EC2 için kullanılan agent pool
 
