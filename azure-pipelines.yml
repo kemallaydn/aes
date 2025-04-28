@@ -6,7 +6,9 @@ pool:
 
 variables:
   remoteUser: 'ec2-user'  # EC2 kullanıcı adı
-  remoteHost: '34.246.186.133'  # EC2 IP adresi
+  remoteHost: '34.243.95.209'  # EC2 IP adresi
+  dockerImageName: 'kemal/aes'  # Docker Hub üzerindeki imaj ismi
+  dockerTag: 'latest'  # İmaj etiketi
 
 jobs:
 - job: DeployToEC2
@@ -26,26 +28,23 @@ jobs:
         ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
       displayName: 'Setup SSH key'
 
-    # Tek bir SSH bağlantısı ile tüm işlemleri yapma
+    # Docker Hub'a push işlemi
+    - script: |
+        docker build -t $(dockerImageName):$(dockerTag) .  # Docker imajını build et
+        docker login -u $(dockerUsername) -p $(dockerPassword)  # Docker Hub'a giriş yap
+        docker push $(dockerImageName):$(dockerTag)  # İmajı push et
+      displayName: 'Build Docker Image and Push to Docker Hub'
+
+    # EC2'de Docker imajını çekme ve çalıştırma
     - script: |
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-          # Git repo'yu güncelleme veya çekme
-          if [ -d "/home/$(remoteUser)/aes" ]; then
-            cd /home/$(remoteUser)/aes
-            git pull origin main  # Mevcut repoyu güncelle
-          else
-            git clone https://github.com/kemallaydn/aes.git /home/$(remoteUser)/aes  # Repo yoksa yeni çek
-            cd /home/$(remoteUser)/aes
-          fi
+          # Docker imajını Docker Hub'dan çekme
+          docker pull $(dockerImageName):$(dockerTag)
+          
+          # Eğer eski konteyner varsa silme
+          docker ps -q --filter "name=aes-container" | grep -q . && docker stop aes-container && docker rm aes-container || echo "No existing container to stop and remove"
 
-          # Uygulamayı build etme
-          npm install  # Gerekli bağımlılıkları yükle
-          npm run build  # Uygulamayı build et
-
-          # Build dosyalarını Nginx için doğru dizine taşıma
-          cp -r /home/$(remoteUser)/aes/build/* /usr/share/nginx/html/
-
-          # Nginx servisini yeniden başlatma
-          sudo systemctl restart nginx
+          # Yeni konteyneri çalıştırma
+          docker run -d --name aes-container -p 80:80 $(dockerImageName):$(dockerTag)
         EOF
-      displayName: 'Deploy Application and Restart Nginx'
+      displayName: 'Deploy Docker Container on EC2'
