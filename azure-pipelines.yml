@@ -1,0 +1,51 @@
+trigger:
+- main  # Ana branch'ınız
+
+pool:
+  name: 'AWS'  # EC2 için kullanılan agent pool
+
+variables:
+  remoteUser: 'ec2-user'  # EC2 kullanıcı adı
+  remoteHost: '52.208.254.187'  # EC2 IP adresi
+
+jobs:
+- job: DeployToEC2
+  displayName: 'Deploy to EC2 instance'
+  steps:
+    # Secure file kullanarak SSH anahtarını indiriyoruz
+    - task: DownloadSecureFile@1
+      name: downloadSSHKey
+      inputs:
+        secureFile: 'aes.pem'  # Burada Secure File olarak yüklediğiniz dosyanın ismini yazıyorsunuz
+
+    # SSH anahtarını doğru yere yerleştirme
+    - script: |
+        mkdir -p ~/.ssh
+        cp $(downloadSSHKey.secureFilePath) ~/.ssh/id_rsa  # aes.pem dosyasını ~/.ssh/id_rsa olarak kopyalıyoruz
+        chmod 600 ~/.ssh/id_rsa  # Anahtara doğru izinleri veriyoruz
+        ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
+      displayName: 'Setup SSH key'
+
+    # Tek bir SSH bağlantısı ile tüm işlemleri yapma
+    - script: |
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          # Git repo'yu güncelleme veya çekme
+          if [ -d "/home/$(remoteUser)/aes" ]; then
+            cd /home/$(remoteUser)/aes
+            git pull origin main  # Mevcut repoyu güncelle
+          else
+            git clone https://github.com/kemallaydn/aes.git /home/$(remoteUser)/aes  # Repo yoksa yeni çek
+            cd /home/$(remoteUser)/aes
+          fi
+
+          # Uygulamayı build etme
+          npm install  # Gerekli bağımlılıkları yükle
+          npm run build  # Uygulamayı build et
+
+          # Build dosyalarını Nginx için doğru dizine taşıma
+          cp -r /home/$(remoteUser)/aes/build/* /usr/share/nginx/html/
+
+          # Nginx servisini yeniden başlatma
+          sudo systemctl restart nginx
+        EOF
+      displayName: 'Deploy Application and Restart Nginx'
