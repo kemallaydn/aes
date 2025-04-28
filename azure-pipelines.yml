@@ -1,3 +1,6 @@
+trigger:
+ - main  # Ana branch'ınız
+
 pool:
   name: 'AWS'  # EC2 için kullanılan agent pool
 
@@ -28,7 +31,7 @@ jobs:
     # Bekleme süresi ekliyoruz (örneğin 30 saniye)
     - script: |
         echo "Waiting for 30 seconds before pulling the Docker image..."
-        sleep 30  # 30 saniye bekleme
+        sleep 60  # 30 saniye bekleme
       displayName: 'Wait Before Pulling Docker Image'
     
     # EC2'de Docker imajını çekme ve çalıştırma
