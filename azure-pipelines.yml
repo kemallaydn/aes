@@ -7,7 +7,7 @@ pool:
 variables:
   remoteUser: 'ec2-user'  # EC2 kullanıcı adı
   remoteHost: '34.243.95.209'  # EC2 IP adresi
-  dockerImageName: 'kemal/aes'  # Docker Hub üzerindeki imaj ismi
+  dockerImageName: 'kemallaydn/aes'  # Docker Hub üzerindeki imaj ismi
   dockerTag: 'latest'  # İmaj etiketi
 
 jobs:
@@ -28,13 +28,6 @@ jobs:
         ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
       displayName: 'Setup SSH key'
 
-    # Docker Hub'a push işlemi
-    - script: |
-        docker build -t $(dockerImageName):$(dockerTag) .  # Docker imajını build et
-        docker login -u $(dockerUsername) -p $(dockerPassword)  # Docker Hub'a giriş yap
-        docker push $(dockerImageName):$(dockerTag)  # İmajı push et
-      displayName: 'Build Docker Image and Push to Docker Hub'
-
     # EC2'de Docker imajını çekme ve çalıştırma
     - script: |
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
@@ -45,6 +38,6 @@ jobs:
           docker ps -q --filter "name=aes-container" | grep -q . && docker stop aes-container && docker rm aes-container || echo "No existing container to stop and remove"
 
           # Yeni konteyneri çalıştırma
-          docker run -d --name aes-container -p 80:80 $(dockerImageName):$(dockerTag)
+          docker run -d --name aes-container -p 8080:80 $(dockerImageName):$(dockerTag)
         EOF
       displayName: 'Deploy Docker Container on EC2'
