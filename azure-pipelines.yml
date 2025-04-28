@@ -13,11 +13,6 @@ jobs:
 - job: DeployToEC2
   displayName: 'Deploy to EC2 instance'
   steps:
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.x'
-      addToPath: true
-
   # SSH anahtarını doğru yere yerleştirme
   - script: |
       mkdir -p ~/.ssh
@@ -33,5 +28,3 @@ jobs:
         sudo docker-compose up -d  # Docker servisini yeniden başlatma
       EOF
     displayName: 'Restart Docker service on EC2'
-
-  # İstediğiniz başka bir iş ekleyebilirsiniz (örneğin test veya başka bir dağıtım komutu)
