@@ -33,7 +33,7 @@ jobs:
             cd /home/$(remoteUser)/aes
             git pull origin main  # Mevcut repoyu güncelle
           else
-            git clone https://dev.azure.com/your_org/your_project/_git/your_repo /home/$(remoteUser)/aes  # Repo yoksa yeni çek
+            git clone https://github.com/kemallaydn/aes.git /home/$(remoteUser)/aes  # Repo yoksa yeni çek
             cd /home/$(remoteUser)/aes
           fi
         EOF
