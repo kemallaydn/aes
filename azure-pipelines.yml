@@ -6,7 +6,7 @@ pool:
 
 variables:
   remoteUser: 'ec2-user'  # EC2 kullanıcı adı
-  remoteHost: '52.208.254.187'  # EC2 IP adresi
+  remoteHost: '34.246.186.133'  # EC2 IP adresi
 
 jobs:
 - job: DeployToEC2
