@@ -1,24 +1,37 @@
 trigger:
-  branches:
-    include:
-      - main
+- main  # Ana branch'ınız (örneğin 'main' veya 'master')
 
 pool:
-  name: AWS  # Azure DevOps'taki agent pool'un adı
+  name: 'AWS'  # Agent Pool ismini burada yazıyoruz. EC2'yi eklediğimiz pool ismi bu olacak.
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '3.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+variables:
+  remoteUser: 'ec2-user'  # EC2 kullanıcı adı
+  remoteHost: '52.208.254.187'  # EC2 IP adresi
+  sshKey: $(SSH_PRIVATE_KEY)  # Secure Files veya Pipeline Secrets aracılığıyla tanımladığınız SSH anahtarı
 
-- script: |
-    echo "Building the project"
-    dotnet build
-  displayName: 'Build Project'
+jobs:
+- job: DeployToEC2
+  displayName: 'Deploy to EC2 instance'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
 
-- script: |
-    echo "Deploying to AWS"
-    ssh ec2-user@<ec2-public-ip> "cd /path/to/project && docker-compose down && docker-compose up -d"
-  displayName: 'Deploy to AWS'
+  # SSH anahtarını doğru yere yerleştirme
+  - script: |
+      mkdir -p ~/.ssh
+      echo "$(sshKey)" > ~/.ssh/id_rsa
+      chmod 600 ~/.ssh/id_rsa
+      ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts
+    displayName: 'Setup SSH key'
+
+  # Docker servisini durdurma ve yeniden başlatma
+  - script: |
+      ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+        sudo docker-compose down  # Docker servisini durdurma
+        sudo docker-compose up -d  # Docker servisini yeniden başlatma
+      EOF
+    displayName: 'Restart Docker service on EC2'
+
+  # İstediğiniz başka bir iş ekleyebilirsiniz (örneğin test veya başka bir dağıtım komutu)
