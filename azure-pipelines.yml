@@ -27,7 +27,13 @@ jobs:
         chmod 600 ~/.ssh/id_rsa  # Anahtara doğru izinleri veriyoruz
         ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
       displayName: 'Setup SSH key'
-
+    
+    # Bekleme süresi ekliyoruz (örneğin 30 saniye)
+    - script: |
+        echo "Waiting for 30 seconds before pulling the Docker image..."
+        sleep 30  # 30 saniye bekleme
+      displayName: 'Wait Before Pulling Docker Image'
+    
     # EC2'de Docker imajını çekme ve çalıştırma
     - script: |
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
