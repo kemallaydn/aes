@@ -1,47 +1,48 @@
 trigger:
-- main  # Ana branch'ınızı seçin
+- main  # Ana branch'ınız
 
 pool:
-  name: 'AWS'  # EC2 sunucusunun bulunduğu agent pool
+  name: 'AWS'  # EC2 için kullanılan agent pool
 
 variables:
   remoteUser: 'ec2-user'  # EC2 kullanıcı adı
   remoteHost: '52.208.254.187'  # EC2 IP adresi
-  repoUrl: 'https://dev.azure.com/your_org/your_project/_git/your_repo'  # Git repository URL
-  repoDir: '/home/ec2-user/aes'  # EC2'de uygulamanın bulunduğu dizin
-  buildDir: '/home/ec2-user/aes/build'  # Build dizini
 
 jobs:
 - job: DeployToEC2
   displayName: 'Deploy to EC2 instance'
   steps:
-    # SSH anahtarını kurma
+    # Secure file kullanarak SSH anahtarını indiriyoruz
+    - task: DownloadSecureFile@1
+      name: downloadSSHKey
+      inputs:
+        secureFile: 'aes.pem'  # Burada Secure File olarak yüklediğiniz dosyanın ismini yazıyorsunuz
+
+    # SSH anahtarını doğru yere yerleştirme
     - script: |
         mkdir -p ~/.ssh
-        echo "$(SSH_PRIVATE_KEY)" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts
+        cp $(downloadSSHKey.secureFilePath) ~/.ssh/id_rsa  # aes.pem dosyasını ~/.ssh/id_rsa olarak kopyalıyoruz
+        chmod 600 ~/.ssh/id_rsa  # Anahtara doğru izinleri veriyoruz
+        ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
       displayName: 'Setup SSH key'
 
-    # EC2'ye bağlanıp git repo'yu güncelleme veya çekme
+    # Git repo'yu güncelleme veya çekme
     - script: |
-        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-          # Reposu var mı kontrol et
-          if [ -d "$(repoDir)" ]; then
-            cd $(repoDir)
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          if [ -d "/home/$(remoteUser)/aes" ]; then
+            cd /home/$(remoteUser)/aes
             git pull origin main  # Mevcut repoyu güncelle
           else
-            git clone $(repoUrl) $(repoDir)  # Repo yoksa yeni çek
-            cd $(repoDir)
+            git clone https://dev.azure.com/your_org/your_project/_git/your_repo /home/$(remoteUser)/aes  # Repo yoksa yeni çek
+            cd /home/$(remoteUser)/aes
           fi
         EOF
       displayName: 'Pull or Clone Git Repo'
 
     # Uygulamayı build etme
     - script: |
-        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-          cd $(repoDir)
-          # Eğer node.js ile bir React uygulaması ise:
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          cd /home/$(remoteUser)/aes
           npm install  # Gerekli bağımlılıkları yükle
           npm run build  # Uygulamayı build et
         EOF
@@ -49,16 +50,14 @@ jobs:
 
     # Build dosyalarını Nginx için doğru dizine taşıma
     - script: |
-        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-          # Build dosyalarını Nginx dizinine taşı
-          cp -r $(repoDir)/build/* /usr/share/nginx/html/
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          cp -r /home/$(remoteUser)/aes/build/* /usr/share/nginx/html/
         EOF
       displayName: 'Move Build Files to Nginx Directory'
 
     # Nginx servisini yeniden başlatma
     - script: |
-        ssh -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-          # Nginx'i yeniden başlat
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
           sudo systemctl restart nginx
         EOF
       displayName: 'Restart Nginx Service'
