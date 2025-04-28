@@ -24,10 +24,9 @@ jobs:
       # Docker imajını build et
       - name: Build Docker image
         run: |
-          docker buildx build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/aes:${{ github.sha }} .
-          # Burada github.sha, commit hash'ini alır ve imajı o tag ile build eder
+          docker buildx build --platform linux/amd64 -t ${{ secrets.DOCKER_USERNAME }}/aes:latest .
 
       # Docker imajını Docker Hub'a push et
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/aes:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/aes:latest
