@@ -1,21 +1,24 @@
-# Node.js with React
-# Build a Node.js project that uses React.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
-
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
-  vmImage: ubuntu-latest
+  name: AWS  # Azure DevOps'taki agent pool'un adı
 
 steps:
-- task: NodeTool@0
+- task: UseDotNet@2
   inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
+    packageType: 'sdk'
+    version: '3.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
+    echo "Building the project"
+    dotnet build
+  displayName: 'Build Project'
+
+- script: |
+    echo "Deploying to AWS"
+    ssh ec2-user@<ec2-public-ip> "cd /path/to/project && docker-compose down && docker-compose up -d"
+  displayName: 'Deploy to AWS'
