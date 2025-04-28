@@ -6,7 +6,7 @@ function App() {
 
   // Evet butonuna tıklandığında alert göster
   const handleYesClick = () => {
-    alert("Hayatımaassssaaaaaa hoşmmmmmm geldinnnnnnnnnnnnnnnnnnnnnnnnn");
+    alert("Hayatımda seni seviyorum!");
   };
 
   return (
