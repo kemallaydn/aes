@@ -26,9 +26,10 @@ jobs:
         ssh-keyscan -H $(remoteHost) >> ~/.ssh/known_hosts  # EC2 sunucusunun anahtarını alıyoruz
       displayName: 'Setup SSH key'
 
-    # Git repo'yu güncelleme veya çekme
+    # Tek bir SSH bağlantısı ile tüm işlemleri yapma
     - script: |
         ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          # Git repo'yu güncelleme veya çekme
           if [ -d "/home/$(remoteUser)/aes" ]; then
             cd /home/$(remoteUser)/aes
             git pull origin main  # Mevcut repoyu güncelle
@@ -36,28 +37,15 @@ jobs:
             git clone https://github.com/kemallaydn/aes.git /home/$(remoteUser)/aes  # Repo yoksa yeni çek
             cd /home/$(remoteUser)/aes
           fi
-        EOF
-      displayName: 'Pull or Clone Git Repo'
 
-    # Uygulamayı build etme
-    - script: |
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
-          cd /home/$(remoteUser)/aes
+          # Uygulamayı build etme
           npm install  # Gerekli bağımlılıkları yükle
           npm run build  # Uygulamayı build et
-        EOF
-      displayName: 'Build the Application'
 
-    # Build dosyalarını Nginx için doğru dizine taşıma
-    - script: |
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          # Build dosyalarını Nginx için doğru dizine taşıma
           cp -r /home/$(remoteUser)/aes/build/* /usr/share/nginx/html/
-        EOF
-      displayName: 'Move Build Files to Nginx Directory'
 
-    # Nginx servisini yeniden başlatma
-    - script: |
-        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $(remoteUser)@$(remoteHost) << 'EOF'
+          # Nginx servisini yeniden başlatma
           sudo systemctl restart nginx
         EOF
-      displayName: 'Restart Nginx Service'
+      displayName: 'Deploy Application and Restart Nginx'
