@@ -8,7 +8,7 @@ function App() {
         My Clara'm,
       </Typography>
       <Typography variant="h6" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-          Sana olan duygularımın bu kadar yoğun yaşamanın pişmanlığı ile yazıyorum bu sözleri.
+          Belki de hiç okumayacaksın bu sözleri belki de aklına bile gelmeyecek bu alanımız ama yinede bu sözleri sana olan duygularımın bu kadar yoğun yaşamanın pişmanlığı ile yazıyorum.
           Senle beraber cok guzel anılar biriktirdik, ama şimdi tüm bu anılar cok güzel bir hikayeye dönüşüyor.
           Bana hep eskisi gibi biri olmadığımı söyledin. haklıydın değişmiştim. Olmadığım birine dönüştüm zamanla farkındayım.
           Kıskanç, bencil, çekilmez, arkadaşlarınla arana giren, kendi iç çatışmalarını sana yansıtan birine dönüştüm. Hiç bir zaman olmadıgım ama nasıl olduğunu bilmediğim birine.
