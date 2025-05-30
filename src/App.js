@@ -27,7 +27,7 @@ function App() {
         flexDirection: 'column',
       }}>
         <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-          Bu mesajı görürsen lütfen herhangi bir yerden ulaşmaya çalış.
+          Bu mesajı görürsen lütfen herhangi bir yerden ulaşmaya çalışır mısın.
         </Typography>
       </Box>
     </div>
