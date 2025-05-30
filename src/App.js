@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App" style={{ textAlign: 'center', paddingTop: '20px', position: 'relative', height: '100vh', backgroundColor: '#f0f8ff' }}>
       <Typography variant="h4" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-        Sevgili Açelya,
+        My Clara'm,
       </Typography>
       <Typography variant="h6" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
           Sana olan duygularımın bu kadar yoğun yaşamanın pişmanlığı ile yazıyorum bu sözleri.
@@ -14,6 +14,7 @@ function App() {
           Kıskanç, bencil, çekilmez, arkadaşlarınla arana giren, kendi iç çatışmalarını sana yansıtan birine dönüştüm. Hiç bir zaman olmadıgım ama nasıl olduğunu bilmediğim birine.
           Sana olan aşkım (bunu bir bahane olarak sunmuyorum) beni tanıyamadığın biri yaptı.
           Belkide  sebebi seni kaybetme korkumdu. Ama şimdi seni kaybettim.
+          Keşke seni kaybetmeden önce farkına varabilseydim. Düzeltebilseydim.
           Bu sözleri yazarken seni üzmenin acısıyla yazıyorum(belki de hiç dokunmicak kalbine. umarım öyle olur). Kötü bir sevgili oldum farkındayım. Bu yüzden seni suçlayamam.
           Son buluşmamızda kötü ayrılmak belki de isteyeceğim son anlardandı. Kızgındım ama kendime minik bir kız çocuguna bunu nasıl yapabildim diye suçladım kendimi.
           Beni affetmen için değil bu sözler artık çok geç farkındayım ama seni sevdiğimi bilmeni istiyorum.
