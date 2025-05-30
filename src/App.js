@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Box } from '@mui/material';
+import { Typography } from '@mui/material';
 
 function App() {
   return (
@@ -20,16 +20,13 @@ function App() {
           Beni affetmen için değil bu sözler artık çok geç farkındayım ama seni sevdiğimi bilmeni istiyorum.
           Tek derdi o güzel yüzüne gülücek kondurmak olan bir cocugun, o gözlere sadece gözyaşı ile dokunmasının acısını keske bu sözlerle telafi edebilecek olsam.
           Umarım bir gün seni hep güldürebilecek o güzel insanı bulursun. Bunu tüm kalbimle söylüyorum. Tek dileğim mutlu olman.
-
-         
-
-
-
       </Typography>
+      <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+          Sakarya da seni bekleyen bir evin olduğunu ve seni hep bekleyeceğini bilmeni isterim.
+        </Typography>
       <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
             Seni çok seven ve hep sevecek olan, FKA ❤️.
         </Typography>
-      
     </div>
   );
 }
