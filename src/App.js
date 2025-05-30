@@ -4,10 +4,21 @@ import { Typography, Box } from '@mui/material';
 function App() {
   return (
     <div className="App" style={{ textAlign: 'center', paddingTop: '20px', position: 'relative', height: '100vh', backgroundColor: '#f0f8ff' }}>
-      <Typography variant="h4" gutterBottom style={{ color: '#ff69b4', fontFamily: 'Cursive' }}>
-        Belki bedenlerimiz yanyana değildir ama ruhlarımız zamanın her yerinde beraber olacaktır.
+      <Typography variant="h4" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+        Merhaba Açelya,
       </Typography>
-
+      <Typography variant="h6" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+        Yaşadığmız onca güzel günden sonra böyle kötü ayrılmanın ikimiz için de çok zor olduğunu biliyorum.
+      </Typography>
+      <Typography variant="h6" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+        Sana son kez güzel bir sekilde veda etmek ve eşyalarını teslim etmek istiyorum.
+      </Typography>
+      <Typography variant="h6" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+         Lütfen yarın saat 10:00'da antik bahçenin oraya gelir misin?
+      </Typography>
+      <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+          Seni seviyorum ❤️
+        </Typography>
       <Box sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -16,7 +27,7 @@ function App() {
         flexDirection: 'column',
       }}>
         <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-          Seni seviyorum ❤️
+          Bu mesajı görürsen lütfen herhangi bir yerden ulaşmaya çalış.
         </Typography>
       </Box>
     </div>
