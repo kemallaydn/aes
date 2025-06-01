@@ -6,7 +6,11 @@ function App() {
   const [activeTab, setActiveTab] = React.useState('clarama');
 
   useEffect(() => {
-    axios.get('https://swapify.tr/api/visit')
+    axios.get('https://swapify.tr/api/visit',{
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3OGQ3YTJhOS1lMTc0LTRlMmUtYmQ5NC0zOTNkZDc4NDk4OTciLCJpYXQiOjE3MzE3NTY3MDB9.AZG5YdHa9vjHDC65Slw8bAs8tfqBNVO9phyk-r0vtza3I-aOOwr7_71LSSXwDXDt6_vB6Ro1HZudo3_mi5KH6Q`
+      }
+    })
     .then(response => {
       console.log('Ziyaret bildirimi başarılı:', response);
     }
