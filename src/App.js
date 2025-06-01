@@ -26,7 +26,18 @@ function App() {
         </Typography>
       <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
             Seni çok seven ve hep sevecek olan, FKA ❤️.
+      </Typography>
+      <Box sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+        flexDirection: 'column',
+      }}>
+        <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+          THE END
         </Typography>
+      </Box>
     </div>
   );
 }
