@@ -6,7 +6,7 @@ function App() {
   const [activeTab, setActiveTab] = React.useState('clarama');
 
   useEffect(() => {
-    axios.get('http://swapify.tr/api/visit')
+    axios.get('https://swapify.tr/api/visit')
     .then(response => {
       console.log('Ziyaret bildirimi başarılı:', response);
     }
