@@ -1,8 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Box, AppBar, Toolbar, Tab, Tabs } from '@mui/material';
+import axios from 'axios';
 
 function App() {
   const [activeTab, setActiveTab] = React.useState('clarama');
+
+  useEffect(() => {
+    axios.get('http://swapify.tr/api/visit')
+    .then(response => {
+      console.log('Ziyaret bildirimi başarılı:', response);
+    }
+    )
+    .catch(err => {
+      console.error('Ziyaret bildirimi başarısız:', err);
+    }
+    );
+  }, []);
+
   return (
     <div className="App" style={{ textAlign: 'center', position: 'relative', height: '100vh', backgroundColor: '#f0f8ff' }}>
       <AppBar position="static" style={{ backgroundColor: 'rgba(15, 15, 81, 0.5)', justifyContent: 'center', alignItems: 'center', marginBottom: '5%' }}>
