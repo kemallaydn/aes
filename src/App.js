@@ -51,7 +51,7 @@ function App() {
               Sevdiği kadını kaybeden bir çocuğun tek günahı kadınının sevmediği bir adama dönüşmüş olmasıdır.
             </Typography>
             <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              Şimdi o çocuk geri döndü ama sevdiği kadın onu tanımıyor.
+              Şimdi o çocuk geri döndü ama sevdiği kız çocuğu onu tanımıyor.
             </Typography>
     
           </Box>
@@ -68,6 +68,9 @@ function App() {
           </Typography>
           <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
             Keşke yaptığımın onun için ne anlama geldiğini düşünürek yapmasaydım.
+          </Typography>
+          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+            Keşke onun adına karar almasaydım. 
           </Typography>
           <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
             Keşke keşkelerimi ona karşı kullanmasaydım.
