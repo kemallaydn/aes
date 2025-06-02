@@ -12,11 +12,10 @@ function App() {
       }
     })
     .then(response => {
-      console.log('Ziyaret bildirimi başarılı:', response);
+      
     }
     )
     .catch(err => {
-      console.error('Ziyaret bildirimi başarısız:', err);
     }
     );
   }, []);
@@ -89,6 +88,9 @@ function App() {
           </Typography>
           <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
             Keşke onun adına karar almasaydım. 
+          </Typography>
+          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
+            Keşke beni görseydi.
           </Typography>
           <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
             Keşke keşkelerimi ona karşı kullanmasaydım.
