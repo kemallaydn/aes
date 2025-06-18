@@ -20,7 +20,7 @@ export default function App() {
     if (!started) return;
     const interval = setInterval(() => {
       setBg(images[Math.floor(Math.random() * images.length)]);
-    }, 2000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [images, started]);
 
