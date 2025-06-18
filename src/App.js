@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import ReactPlayer from 'react-player';
 import { Box, Container, Button } from '@mui/material';
 import FlyingHeartsMui from './FlyingHeartsMui';
-import palmiyeler from './Palmiyeler - Aslında Alkol Hala Damarımda.mp3'; // ← Dosyanın tam adıyla
+import palmiyeler from './Palmiyeler - Aslında Alkol Hala Damarımda.mp3';
 
 function importAll(r) {
   return r.keys().map(r);
@@ -15,6 +15,14 @@ export default function App() {
   );
   const [bg, setBg] = useState(images[0] || '');
   const [started, setStarted] = useState(false);
+
+  // Görselleri preload ederek cache'e at
+  useEffect(() => {
+    images.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [images]);
 
   useEffect(() => {
     if (!started) return;
@@ -38,7 +46,6 @@ export default function App() {
             alignItems: 'center',
             justifyContent: 'center',
             zIndex: 2,
-            // istersen karartma ekle
             bgcolor: 'rgba(0,0,0,0.4)',
           }}
         >
@@ -46,7 +53,7 @@ export default function App() {
             variant="contained"
             onClick={() => setStarted(true)}
             sx={{
-              backgroundColor: '#5D1451',       // patlıcan moru
+              backgroundColor: '#5D1451',
               color: '#fff',
               fontWeight: 'bold',
               '&:hover': { backgroundColor: '#4a0f3e' },
@@ -63,15 +70,17 @@ export default function App() {
 
           <Box sx={{ position: 'relative', width: '100%', height: '60vh', mt: 2, overflow: 'hidden' }}>
             <Box
+              component="img"
+              src={bg}
+              alt="Background"
+              loading="lazy"
               sx={{
                 position: 'fixed',
                 top: 0,
                 left: 0,
                 width: '100vw',
                 height: '100vh',
-                backgroundImage: `url(${bg})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
+                objectFit: 'cover',
                 zIndex: -1,
               }}
             />
