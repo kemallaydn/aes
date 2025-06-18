@@ -3,7 +3,7 @@ name: Build and Push Docker Image to Docker Hub
 on:
   push:
     branches:
-      - main  # Ana branch'e commit yapıldığında çalışacak
+      - hikaye  # Ana branch'e commit yapıldığında çalışacak
 
 jobs:
   build:
