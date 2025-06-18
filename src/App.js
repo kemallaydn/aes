@@ -1,105 +1,85 @@
-import React, { useEffect } from 'react';
-import { Typography, Box, AppBar, Toolbar, Tab, Tabs } from '@mui/material';
-import axios from 'axios';
+import React, { useState, useEffect, useMemo } from 'react';
+import ReactPlayer from 'react-player';
+import { Box, Container, Button } from '@mui/material';
+import FlyingHeartsMui from './FlyingHeartsMui';
 
-function App() {
-  const [activeTab, setActiveTab] = React.useState('clarama');
-
-  useEffect(() => {
-    axios.get('https://swapify.tr/api/visit',{
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3OGQ3YTJhOS1lMTc0LTRlMmUtYmQ5NC0zOTNkZDc4NDk4OTciLCJpYXQiOjE3MzE3NTY3MDB9.AZG5YdHa9vjHDC65Slw8bAs8tfqBNVO9phyk-r0vtza3I-aOOwr7_71LSSXwDXDt6_vB6Ro1HZudo3_mi5KH6Q`
-      }
-    })
-    .then(response => {
-      
-    }
-    )
-    .catch(err => {
-    }
-    );
-  }, []);
-
-  return (
-    <div className="App" style={{ textAlign: 'center', position: 'relative', height: '100vh', backgroundColor: '#f0f8ff' }}>
-      <AppBar position="static" style={{ backgroundColor: 'rgba(15, 15, 81, 0.5)', justifyContent: 'center', alignItems: 'center', marginBottom: '5%' }}>
-        <Toolbar>
-          <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)} textColor="inherit">
-            <Tab value="clarama" label="Clara'ma" />
-            <Tab value="notlar" label="Günah Çıkarma" />
-            <Tab value="keske" label="Keşkeler" />
-          </Tabs>
-        </Toolbar>
-      </AppBar>
-      {
-        activeTab === 'clarama' ? (
-
-          <>
-            <Typography variant="h4" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              My Clara'm,
-            </Typography>
-            <Typography variant="h6" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              Belki de hiç okumayacaksın bu sözleri belki de aklına bile gelmeyecek bu alanımız ama yinede bu sözleri sana olan duygularımın bu kadar yoğun yaşamanın pişmanlığı ile yazıyorum.
-              Senle beraber cok guzel anılar biriktirdik, ama şimdi tüm bu anılar cok güzel bir hikayeye dönüşüyor.
-              Bana hep eskisi gibi biri olmadığımı söyledin. haklıydın değişmiştim. Olmadığım birine dönüştüm zamanla farkındayım.
-              Kıskanç, bencil, çekilmez, arkadaşlarınla arana giren, kendi iç çatışmalarını sana yansıtan birine dönüştüm. Hiç bir zaman olmadıgım ama nasıl olduğunu bilmediğim birine.
-              Sana olan aşkım (bunu bir bahane olarak sunmuyorum) beni tanıyamadığın biri yaptı.
-              Belkide  sebebi seni kaybetme korkumdu. Ama şimdi seni kaybettim.
-              Keşke seni kaybetmeden önce farkına varabilseydim. Düzeltebilseydim.
-              Bu sözleri yazarken seni üzmenin acısıyla yazıyorum(belki de hiç dokunmicak kalbine. umarım öyle olur). Kötü bir sevgili oldum farkındayım. Bu yüzden seni suçlayamam.
-              Son buluşmamızda kötü ayrılmak belki de isteyeceğim son anlardandı. Kızgındım ama kendime minik bir kız çocuguna bunu nasıl yapabildim diye suçladım kendimi.
-              Beni affetmen için değil bu sözler artık çok geç farkındayım ama seni sevdiğimi bilmeni istiyorum.
-              Tek derdi o güzel yüzüne gülücek kondurmak olan bir cocugun, o gözlere sadece gözyaşı ile dokunmasının acısını keske bu sözlerle telafi edebilecek olsam.
-              Umarım bir gün seni hep güldürebilecek o güzel insanı bulursun. Bunu tüm kalbimle söylüyorum. Tek dileğim mutlu olman.
-            </Typography>
-            <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              Sakarya da seni bekleyen bir evin olduğunu ve seni hep bekleyeceğini bilmeni isterim.
-            </Typography>
-            <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              Seni çok seven ve hep sevecek olan, FKA ❤️.
-            </Typography>
-            <Typography variant="h6" style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              THE END
-            </Typography>
-          </>
-        ) : activeTab == "notlar" ? (
-          <Box sx={{ padding: 2 }}>
-            <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              Sevdiği kadını kaybeden bir çocuğun tek günahı kadınının sevmediği bir adama dönüşmüş olmasıdır.
-            </Typography>
-            <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-              Şimdi o çocuk geri döndü ama sevdiği kız çocuğu onu tanımıyor.
-            </Typography>
-    
-          </Box>
-        ) : (
-          <Box sx={{ padding: 2 }}>
-          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-            Keşke onu benden nefret etmesini sağlayarak ayrılsaydım belki o zaman daha az üzülürdü.
-          </Typography>
-          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-            Keşke ona olan sevgimin arkadaşlarıyla arasına girmesine izin vermeseydim.
-          </Typography>
-          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-            Keşke onun beni sevmesine izin vermeseydim.
-          </Typography>
-          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-            Keşke yaptığımın onun için ne anlama geldiğini düşünürek yapmasaydım.
-          </Typography>
-          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-            Keşke onun adına karar almasaydım. 
-          </Typography>
-          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-            Keşke beni görseydi.
-          </Typography>
-          <Typography variant="h5" gutterBottom style={{ color: '#6a5acd', fontFamily: 'Cursive' }}>
-            Keşke keşkelerimi ona karşı kullanmasaydım.
-          </Typography>
-        </Box>
-        )
-      }
-    </div>
-  );
+function importAll(r) {
+  return r.keys().map(r);
 }
 
-export default App;
+export default function App() {
+  const images = useMemo(
+    () => importAll(require.context('./images', false, /\.(JPG|JPEG|png|jpg|HEIC)$/)),
+    []
+  );
+  const [bg, setBg] = useState(images[0] || '');
+  const [started, setStarted] = useState(false);
+  const youtubeLink = 'https://youtu.be/xDSe2rWmK0w?si=3SK4fuH6saI7Q1I1';
+
+  useEffect(() => {
+    if (!started) return;
+    const interval = setInterval(() => {
+      const idx = Math.floor(Math.random() * images.length);
+      setBg(images[idx]);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [images, started]);
+
+  return (
+    <Container maxWidth="sm" sx={{ p: 2 }}>
+      {!started && (
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setStarted(true)}
+        >
+          HER ŞEY BİR HAMBURGER'LA BAŞLADI
+        </Button>
+      )}
+
+      {started && (
+        <>
+          {/* YouTube sesini başlat */}
+          <ReactPlayer
+            url={youtubeLink}
+            playing={true}
+            hidden={true}
+            volume={1}
+          />
+
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              height: '60vh',
+              mt: 2,
+              overflow: 'hidden',
+            }}
+          >
+            <Box
+              component="img"
+              src={bg}
+              alt="Background"
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }}
+            />
+            <FlyingHeartsMui
+              src={bg}
+              count={80}
+              size={100}
+              minDur={2}
+              maxDur={5}
+              zoom={1}
+            />
+          </Box>
+        </>
+      )}
+    </Container>
+  );
+}
